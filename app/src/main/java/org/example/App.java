@@ -5,7 +5,8 @@ package org.example;
 
 public class App {
   public String getGreeting() {
-    return "Hello Java!";
+    // This is a specific comment
+    return "Hello Project!";
   }
 
   public static void main(String[] args) {
