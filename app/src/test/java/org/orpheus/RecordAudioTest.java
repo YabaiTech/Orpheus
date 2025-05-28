@@ -7,21 +7,21 @@ import java.io.File;
 
 class RecordAudioTest {
   @Test
-  void test_audio_file() {
+  void testAudioFile() {
     RecordAudio recorder = new RecordAudio();
-    recorder.set_file_path(System.getenv("HOME") + "/Downloads/recording.wav");
+    recorder.setFilePath(System.getenv("HOME") + "/Downloads/recording.wav");
 
-    assertTrue(recorder.get_file_path().equals(System.getenv("HOME") + "/Downloads/recording.wav"),
+    assertTrue(recorder.getFilePath().equals(System.getenv("HOME") + "/Downloads/recording.wav"),
         "Set path should be changed.");
 
-    File recorded_file = new File(recorder.get_file_path());
+    File recordedFile = new File(recorder.getFilePath());
     recorder.record(10);
 
-    assertTrue(recorded_file.exists(), "Audio file of the set path should be created.");
-    assertTrue(recorded_file.length() > 0, "Audio file should be non-empty.");
+    assertTrue(recordedFile.exists(), "Audio file of the set path should be created.");
+    assertTrue(recordedFile.length() > 0, "Audio file should be non-empty.");
 
-    if (recorded_file.exists()) {
-      recorded_file.delete();
+    if (recordedFile.exists()) {
+      recordedFile.delete();
     }
   }
 }

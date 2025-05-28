@@ -1,65 +1,64 @@
 package org.orpheus;
 
 import java.io.*;
-
 import javax.sound.sampled.*;
 
 public class RecordAudio {
-  private String file_path = System.getenv("HOME") + "/recording.wav";
-  private File output_file = new File(this.file_path);
+  private String filePath = System.getenv("HOME") + "/recording.wav";
+  private File outputFile = new File(this.filePath);
   private TargetDataLine line;
-  private Thread recording_thread;
+  private Thread recordingThread;
 
-  public String get_file_path() {
-    return this.file_path;
+  public String getFilePath() {
+    return this.filePath;
   }
 
-  public void set_file_path(String path) {
+  public void setFilePath(String path) {
     if (!path.endsWith(".wav")) {
       System.out.println("ERROR: Invalid file name.");
       System.exit(1);
     }
 
-    this.file_path = path;
-    this.output_file = new File(this.file_path);
+    this.filePath = path;
+    this.outputFile = new File(this.filePath);
   }
 
-  private AudioFormat get_audio_format() {
+  private AudioFormat getAudioFormat() {
     float rate = 16000.0F;
-    int size_in_bits = 8;
+    int sizeInBits = 8;
     int channels = 2;
     boolean signed = true;
-    boolean big_endian = true;
+    boolean bigEndian = true;
 
-    return new AudioFormat(rate, size_in_bits, channels, signed, big_endian);
+    return new AudioFormat(rate, sizeInBits, channels, signed, bigEndian);
   }
 
   private void start() {
     try {
-      AudioFormat audio_format = this.get_audio_format();
-      DataLine.Info dataline_info = new DataLine.Info(TargetDataLine.class, audio_format);
+      AudioFormat audioFormat = this.getAudioFormat();
+      DataLine.Info datalineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
 
-      if (!AudioSystem.isLineSupported(dataline_info)) {
+      if (!AudioSystem.isLineSupported(datalineInfo)) {
         System.out.println("Dataline is unsupported.");
         System.exit(1);
       }
 
-      this.line = (TargetDataLine) AudioSystem.getLine(dataline_info);
-      this.line.open(audio_format);
+      this.line = (TargetDataLine) AudioSystem.getLine(datalineInfo);
+      this.line.open(audioFormat);
       this.line.start();
       System.out.println("Capturing audio now...");
 
-      this.recording_thread = new Thread(() -> {
+      this.recordingThread = new Thread(() -> {
         try {
-          AudioInputStream input_stream = new AudioInputStream(this.line);
-          AudioSystem.write(input_stream, AudioFileFormat.Type.WAVE, this.output_file);
+          AudioInputStream inputStream = new AudioInputStream(this.line);
+          AudioSystem.write(inputStream, AudioFileFormat.Type.WAVE, this.outputFile);
 
         } catch (IOException e) {
           e.printStackTrace();
         }
       });
 
-      this.recording_thread.start();
+      this.recordingThread.start();
       System.out.println("Writing captured audio to disk now...");
     } catch (LineUnavailableException e) {
       e.printStackTrace();
@@ -69,7 +68,7 @@ public class RecordAudio {
   private void finish() {
     this.line.stop();
     this.line.close();
-    System.out.println("Saved recorded file as: " + file_path);
+    System.out.println("Saved recorded file as: " + filePath);
   }
 
   public void record(int duration) {
