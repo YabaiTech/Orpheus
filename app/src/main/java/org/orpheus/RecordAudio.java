@@ -10,7 +10,11 @@ public class RecordAudio {
   private TargetDataLine line;
   private Thread recording_thread;
 
-  public void set_file(String path) {
+  public String get_file_path() {
+    return this.file_path;
+  }
+
+  public void set_file_path(String path) {
     if (!path.endsWith(".wav")) {
       System.out.println("ERROR: Invalid file name.");
       System.exit(1);
