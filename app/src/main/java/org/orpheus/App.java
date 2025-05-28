@@ -3,13 +3,89 @@
  */
 package org.orpheus;
 
+import javax.swing.*;
+import java.awt.*;
+import com.formdev.flatlaf.intellijthemes.FlatNordIJTheme;
+
 public class App {
+
   public String getGreeting() {
     // This is a specific comment
     return "Hello Project!";
   }
 
+
   public static void main(String[] args) {
-    System.out.println(new App().getGreeting());
+    SwingUtilities.invokeLater(() -> {
+      // Setup Nord theme
+      FlatNordIJTheme.setup();
+
+      // Create main frame
+      JFrame frame = new JFrame("REDISCOVER MUSIC");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(600, 500);
+      frame.setLocationRelativeTo(null);
+      frame.setLayout(new BorderLayout());
+
+      // Title bar
+      JPanel titleBar = new JPanel();
+      titleBar.setBackground(new Color(46, 52, 64));
+      titleBar.setPreferredSize(new Dimension(frame.getWidth(), 50));
+      titleBar.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+      JLabel titleLabel = new JLabel("REDISCOVER MUSIC");
+      titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
+      titleLabel.setForeground(new Color(236, 239, 244));
+      titleBar.add(titleLabel);
+
+      // Center panel (for search results)
+      JPanel middlePanel = new JPanel();
+      middlePanel.setBackground(new Color(59, 66, 82));
+      middlePanel.setLayout(new BorderLayout());
+
+      // Buttons panel
+      JPanel buttonPanel = new JPanel();
+      buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+      buttonPanel.setBackground(new Color(59, 66, 82));
+
+      JButton recordButton = new JButton("Record");
+      JButton uploadButton = new JButton("Upload");
+      JButton searchButton = new JButton("Search");
+
+      Dimension buttonSize = new Dimension(120, 35);
+      recordButton.setPreferredSize(buttonSize);
+      uploadButton.setPreferredSize(buttonSize);
+      searchButton.setPreferredSize(buttonSize);
+
+      buttonPanel.add(recordButton);
+      buttonPanel.add(uploadButton);
+      buttonPanel.add(searchButton);
+
+      // Footer panel
+      JPanel footerPanel = new JPanel();
+      footerPanel.setPreferredSize(new Dimension(frame.getWidth(), 30));
+      footerPanel.setBackground(new Color(46, 52, 64));
+      footerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+      JLabel footerLabel = new JLabel("\u00A9 All rights reserved");
+      footerLabel.setForeground(new Color(236, 239, 244));
+      footerPanel.add(footerLabel);
+
+      // Bottom panel
+      JPanel bottomPanel = new JPanel();
+      bottomPanel.setLayout(new BorderLayout());
+      bottomPanel.setBackground(new Color(59, 66, 82));
+      bottomPanel.add(buttonPanel, BorderLayout.CENTER);    // Button panel
+      bottomPanel.add(footerPanel, BorderLayout.SOUTH);     // Footer panel
+
+      // Assemble all components
+      frame.add(titleBar, BorderLayout.NORTH);
+      frame.add(middlePanel, BorderLayout.CENTER);
+      frame.add(bottomPanel, BorderLayout.SOUTH);
+
+      // Display frame
+      frame.setVisible(true);
+      frame.requestFocusInWindow();
+    });
   }
 }
