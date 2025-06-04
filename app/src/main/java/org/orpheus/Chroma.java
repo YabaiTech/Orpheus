@@ -7,7 +7,7 @@ import org.orpheus.Constants;
 
 public class Chroma {
   private final double[] coefficients = { 0.25, 0.75, 1.0, 0.75, 0.25 };
-  private final int bandsLen = 12;
+  public static final int bandsLen = 12;
   private final int minFreq = 28;
   private final int maxFreq = 3520;
 
