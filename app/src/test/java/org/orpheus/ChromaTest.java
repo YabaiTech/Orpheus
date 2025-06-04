@@ -13,7 +13,6 @@ class ChromaTest {
   void testSampling() {
     Chroma c = new Chroma();
 
-    assertTrue(c.bufferLen == 1, "Check if Chroma's buffer length is properly set");
-    assertTrue(c.bufferI == 0, "Check if Chroma's buffer index is properly set");
+    assertTrue(c.bandsLen == 12, "Check if Chroma's band length is properly set");
   }
 }
