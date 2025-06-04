@@ -11,9 +11,14 @@ public class Chroma {
   private final int minFreq = 28;
   private final int maxFreq = 3520;
 
+  public final int BUFFER_SIZE = 8;
+  private int bufferLen;
+  private int bufferI;
+  private double[][] buffer = new double[8][bandsLen];
+  private double[] resultsBuffer = new double[bandsLen];
+
   // Zig comp-time pre-calculated [section start]
   private int[] notes = null;
-  private double[] hamming = null;
   // Zig comp-time pre-calculated [section end]
 
   Chroma() {
@@ -32,12 +37,6 @@ public class Chroma {
 
   private final int minIndex = Math.max(1, freqToIndex(minFreq));
   private final int maxIndex = Math.min(Constants.windowSize / 2, freqToIndex(maxFreq));
-
-  public int bufferLen;
-  public int bufferI;
-  public double[][] buffer;
-  public double[] resultsBuffer = new double[bandsLen];
-  private final int BUFFER_SIZE = 8;
 
   private void generateNotes() {
     this.notes = new int[Constants.windowSize];
