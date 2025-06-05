@@ -14,8 +14,8 @@ public class Chroma {
   public final int BUFFER_SIZE = 8;
   private int bufferLen;
   private int bufferI;
-  private double[][] buffer = new double[8][bandsLen];
-  private double[] resultsBuffer = new double[bandsLen];
+  private double[][] buffer;
+  private double[] resultsBuffer;
 
   // Zig comp-time pre-calculated [section start]
   private int[] notes = null;
@@ -24,7 +24,8 @@ public class Chroma {
   Chroma() {
     this.bufferLen = 1;
     this.bufferI = 0;
-    this.buffer = null;
+    this.buffer = new double[8][bandsLen];
+    this.resultsBuffer = new double[bandsLen];
 
     // In the Zig implementation, they used compile-time evaluation to get an
     // already filled array for the following things.
