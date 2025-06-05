@@ -54,7 +54,7 @@ public class Chroma {
     double[] buf = buffer[bufferI];
     Arrays.fill(buf, 0);
 
-    for (int i = minIndex; i < minIndex; i++) {
+    for (int i = minIndex; i < maxIndex; i++) {
       int note = notes[i];
       double energy = fftFrame[i];
 
