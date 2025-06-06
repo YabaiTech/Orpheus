@@ -24,11 +24,11 @@ public class RecordAudio {
   }
 
   private AudioFormat getAudioFormat() {
-    float rate = 16000.0F;
-    int sizeInBits = 8;
-    int channels = 2;
+    float rate = 11025f;
+    int sizeInBits = 16;
+    int channels = 1;
     boolean signed = true;
-    boolean bigEndian = true;
+    boolean bigEndian = false;
 
     return new AudioFormat(rate, sizeInBits, channels, signed, bigEndian);
   }
@@ -54,6 +54,7 @@ public class RecordAudio {
           AudioSystem.write(inputStream, AudioFileFormat.Type.WAVE, this.outputFile);
 
         } catch (IOException e) {
+          System.out.println("[RecordAudio] ERROR: ");
           e.printStackTrace();
         }
       });
@@ -61,6 +62,7 @@ public class RecordAudio {
       this.recordingThread.start();
       System.out.println("Writing captured audio to disk now...");
     } catch (LineUnavailableException e) {
+      System.out.println("[RecordAudio] ERROR: ");
       e.printStackTrace();
     }
   }
@@ -77,6 +79,7 @@ public class RecordAudio {
     try {
       Thread.sleep(duration * 1000);
     } catch (InterruptedException e) {
+      System.out.println("[RecordAudio] ERROR: ");
       e.printStackTrace();
     }
 
