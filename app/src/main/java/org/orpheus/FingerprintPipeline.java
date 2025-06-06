@@ -9,7 +9,7 @@ public class FingerprintPipeline {
   private final int HOP_SIZE = Constants.hopSize;
 
   // step 1 (already done via class ProcessAudio): fetch samples array
-  public byte[] calculateFingerPrint(double[] samples) {
+  public int[] calculateFingerPrint(double[] samples) {
     try {
       // step 2: split the samples into 4096 windows/frames with 50% overlap
       List<double[]> frames = new ArrayList<>();
@@ -68,19 +68,28 @@ public class FingerprintPipeline {
       // step 9: extract integer fingerprints and convert to int[] for
       // compression (optional?)
       List<Integer> fingerprint = fingerprintCalculator.fingerprint;
-      int[] toBeCompressed = new int[fingerprint.size()];
+      int[] fingerprintRes = new int[fingerprint.size()];
       for (int i = 0; i < fingerprint.size(); ++i) {
-        toBeCompressed[i] = fingerprint.get(i);
+        fingerprintRes[i] = fingerprint.get(i);
       }
-
-      // step 10: compress into byte[]
-      Compress compressor = new Compress(toBeCompressed.length, toBeCompressed.length / 10);
-
       fingerprintCalculator.close();
-      return compressor.compress(toBeCompressed);
+
+      return fingerprintRes;
     } catch (Exception e) {
+      System.out.println("[FingerprintPipeline] ERROR: ");
       e.printStackTrace();
       return null;
     }
+  }
+
+  public byte[] compressFingerprint(int[] fingerprint) {
+    if (fingerprint == null || fingerprint.length == 0) {
+      return null;
+    }
+
+    // step 10: compress into byte[]
+    Compress compressor = new Compress(fingerprint.length, fingerprint.length / 10);
+
+    return compressor.compress(fingerprint);
   }
 }
