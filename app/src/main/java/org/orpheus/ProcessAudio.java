@@ -38,6 +38,7 @@ public class ProcessAudio {
 
       return samples;
     } catch (UnsupportedAudioFileException | IOException e) {
+      System.out.println("[ProcessAudio] ERROR: ");
       e.printStackTrace();
       return null;
     }
