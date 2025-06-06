@@ -4,8 +4,9 @@ import java.io.*;
 import javax.sound.sampled.*;
 
 public class ProcessAudio {
-  private static final AudioFormat TARGET_FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 11025f, 16, 1, 2,
-      11025, false);
+  private static final AudioFormat TARGET_FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+      Constants.sampleRate, Constants.bitsPerSample, Constants.channelCount, Constants.bytesPerFrame,
+      Constants.framesPerSecond, false);
 
   public static double[] parse(String file) {
     try {
@@ -23,11 +24,15 @@ public class ProcessAudio {
 
       double[] samples = new double[totalFrames];
       for (int frame = 0, sampleIdx = 0; frame < totalFrames; ++frame) {
+        // convert to signed integer 0..255
         int low = streamBytes[sampleIdx] & 0xFF;
         int high = streamBytes[sampleIdx + 1] << 8;
+        // conbine all 16 bits
         int signed16 = high | low;
 
+        // singed16 is the signed 16bit PCM amplitude in range [-32768, +32767]
         samples[frame] = signed16 / 32768.0;
+        // hence, our sample contains doubles in range (-1..+1)
         sampleIdx += sampleSize * channelCount;
       }
 
