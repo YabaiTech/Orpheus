@@ -8,8 +8,13 @@ import java.util.Arrays;
 class FingerprintPipelineTest {
   @Test
   public void testEmptySamples() {
-    byte[] fingerprint = new FingerprintPipeline().calculateFingerPrint(new double[0]);
-    assertNull(fingerprint, "Fingerprint should be null for an empty sample.");
+    FingerprintPipeline fingerprintPipeline = new FingerprintPipeline();
+    int[] fingerprint = fingerprintPipeline.calculateFingerPrint(new double[0]);
+    assertNotNull(fingerprint, "Raw fingerprint should not be null for empty sample.");
+    assertEquals(0, fingerprint.length, "Raw fingerprint should return int[] of length 0.");
+
+    byte[] compressedFingerprint = fingerprintPipeline.compressFingerprint(fingerprint);
+    assertNull(compressedFingerprint, "Fingerprint should be null for an empty sample.");
   }
 
   @Test
@@ -18,8 +23,12 @@ class FingerprintPipelineTest {
     double samples[] = new double[shortLen];
     Arrays.fill(samples, 0.0);
 
-    byte[] fingerprint = new FingerprintPipeline().calculateFingerPrint(samples);
-    assertNull(fingerprint, "Fingerprint should be null for samples shorter than 4096.");
+    FingerprintPipeline fingerprintPipeline = new FingerprintPipeline();
+
+    int[] fingerprint = fingerprintPipeline.calculateFingerPrint(samples);
+    byte[] compressedFingerprint = fingerprintPipeline.compressFingerprint(fingerprint);
+    assertNull(fingerprint, "Raw fingerprint should be null for samples shorter than 4096.");
+    assertNull(compressedFingerprint, "Fingerprint should be null for samples shorter than 4096.");
   }
 
   @Test
@@ -29,11 +38,19 @@ class FingerprintPipelineTest {
     FingerprintPipeline fingerprintPipeline = new FingerprintPipeline();
 
     double[] samples = new double[Constants.windowSize + Constants.hopSize * 19];
-    byte[] fp1 = fingerprintPipeline.calculateFingerPrint(samples);
-    byte[] fp2 = fingerprintPipeline.calculateFingerPrint(samples);
+    int[] fp1 = fingerprintPipeline.calculateFingerPrint(samples);
+    byte[] cfp1 = fingerprintPipeline.compressFingerprint(fp1);
+    int[] fp2 = fingerprintPipeline.calculateFingerPrint(samples);
+    byte[] cfp2 = fingerprintPipeline.compressFingerprint(fp2);
 
-    assertNotNull(fp1, "Fingerprint should be non-null.");
-    assertNotNull(fp2, "Fingerprint should be non-null.");
-    assertArrayEquals(fp1, fp2, "Fingerprint calculation on the same sample should always be identical");
+    // still fails if only raw fingerprints are checked. conclusion: something(s)
+    // has gone wrong in the java port
+    assertNotNull(fp1, "Raw fingerprint should be non-null.");
+    assertNotNull(fp2, "Raw fingerprint should be non-null.");
+    assertArrayEquals(fp1, fp2, "Raw fingerprint calculation on the same sample should always be identical");
+    // assertNotNull(cfp2, "Fingerprint should be non-null.");
+    // assertNotNull(cfp2, "Fingerprint should be non-null.");
+    // assertArrayEquals(cfp1, cfp2, "Fingerprint calculation on the same sample
+    // should always be identical");
   }
 }
