@@ -4,8 +4,9 @@ import java.io.*;
 import javax.sound.sampled.*;
 
 public class ProcessAudio {
-  private static final AudioFormat TARGET_FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 11025f, 16, 1, 2,
-      11025, false);
+  private static final AudioFormat TARGET_FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+      Constants.sampleRate, Constants.bitsPerSample, Constants.channelCount, Constants.bytesPerFrame,
+      Constants.framesPerSecond, false);
 
   public static double[] parse(String file) {
     try {

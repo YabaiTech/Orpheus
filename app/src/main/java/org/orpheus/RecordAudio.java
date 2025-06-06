@@ -24,9 +24,9 @@ public class RecordAudio {
   }
 
   private AudioFormat getAudioFormat() {
-    float rate = 11025f;
-    int sizeInBits = 16;
-    int channels = 1;
+    float rate = Constants.sampleRate;
+    int sizeInBits = Constants.bitsPerSample;
+    int channels = Constants.channelCount;
     boolean signed = true;
     boolean bigEndian = false;
 
