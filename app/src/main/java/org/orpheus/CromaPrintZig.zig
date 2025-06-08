@@ -474,9 +474,11 @@ pub fn compress(fingerprint: []const u32, gpa: Allocator) error{OutOfMemory}![]u
 }
 
 fn packedIntArraySize(n: usize, size: usize) usize {
-    return (size * n + 7) / 8;
+    return (size * n + 7) / 8;  // due to operator precedence, it'll get multiplied before addition happens
 }
 
+// this function is simply packing the `source` array (which is a u8 array where each value is withing the [0-7] interval) to
+// a compact array of u8 in `destination` where only the 3-bits required to store the values of `source` are stored side by side
 fn packInt3Array(destination: [*]u8, source: []const u8) [*]u8 {
     var src = source;
     var dest = destination;
@@ -528,6 +530,7 @@ fn packInt3Array(destination: [*]u8, source: []const u8) [*]u8 {
     }
 }
 
+// similar to the `packInt3Array` array but for 5-bit values
 fn packInt5Array(destination: [*]u8, source: []const u8) [*]u8 {
     var src = source;
     var dest = destination;
