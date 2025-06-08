@@ -54,9 +54,10 @@ class Compress {
       this.normalBits = new ArrayList<>(fingerprint.length);
       this.exceptionalBits = new ArrayList<>(fingerprint.length / 10);
       processSubFingerprint(fingerprint[0]);
-      for (int current = 1, prev = 0; current < fingerprint.length; current++, prev++) {
-        // WARNING: The following line can throw. Handle it gracefully
-        processSubFingerprint(current ^ prev);
+
+      for (int i = 1; i < fingerprint.length; i++) {
+        int diff = fingerprint[i] ^ fingerprint[i - 1];
+        processSubFingerprint(diff);
       }
     }
 
