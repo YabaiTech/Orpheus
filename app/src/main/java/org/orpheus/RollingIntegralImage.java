@@ -12,7 +12,6 @@ public class RollingIntegralImage {
 
   RollingIntegralImage() {
     this.data = new double[DATA_SIZE];
-    Arrays.fill(this.data, 0.0);
     this.numRows = 0;
   }
 
