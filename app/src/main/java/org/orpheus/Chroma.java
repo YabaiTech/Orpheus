@@ -7,6 +7,8 @@ public class Chroma {
   public static final int bandsLen = 12;
   private final int minFreq = 28;
   private final int maxFreq = 3520;
+  private final int minIndex = Math.max(1, freqToIndex(minFreq));
+  private final int maxIndex = Math.min(Constants.windowSize / 2, freqToIndex(maxFreq));
 
   public final int BUFFER_SIZE = 8;
   private int bufferLen;
@@ -21,20 +23,21 @@ public class Chroma {
   Chroma() {
     this.bufferLen = 1;
     this.bufferI = 0;
+
+    // We've initialized both of the buffers in the constrcutor here.
+    // But in the original code, they didn't. They probable manually assigned the
+    // buffer.
     this.buffer = new double[8][bandsLen];
     this.resultsBuffer = new double[bandsLen];
 
-    // In the Zig implementation, they used compile-time evaluation to get an
-    // already filled array for the following things.
+    // In the Zig implementation, they used compile-time evaluation to generate
+    // `notes` array in compile-time for future use.
     //
     // But, Java doesn't support that. So, we do that in runtime using the following
-    // function invocations. Rather than returning the array, we store the notes in
-    // their appropriate data memberss.
+    // function invocation. Rather than returning the array, we store the notes in
+    // the `this.notes` data member.
     generateNotes();
   }
-
-  private final int minIndex = Math.max(1, freqToIndex(minFreq));
-  private final int maxIndex = Math.min(Constants.windowSize / 2, freqToIndex(maxFreq));
 
   private void generateNotes() {
     this.notes = new int[Constants.windowSize];
@@ -73,9 +76,10 @@ public class Chroma {
 
       normalize(resultsBuffer);
       return resultsBuffer;
+    } else {
+      bufferLen += 1;
+      return null;
     }
-
-    return buf;
   }
 
   private double euclideanNorm(double[] features) {
