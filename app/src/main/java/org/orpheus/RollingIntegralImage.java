@@ -16,36 +16,36 @@ public class RollingIntegralImage {
   }
 
   public void addRow(double[] features) {
-    double[] currentRow = getRow(numRows);
-    double accum = 0.0;
+    RowView currentRow = getRow(numRows);
 
+    double accum = 0.0;
     for (int i = 0; i < NUM_COLUMNS; i++) {
-      // Better than an assert. Halt execution if our assumption is not met
       if (Double.isNaN(features[i])) {
         throw new IllegalArgumentException("[RollingIntegralImage] features[i] is NaN");
       }
 
       accum += features[i];
-      currentRow[i] = accum;
+      currentRow.set(i, accum);
     }
 
     if (numRows > 0) {
-      double[] lastRow = getRow(numRows - 1);
+      RowView lastRow = getRow(numRows - 1);
       for (int i = 0; i < NUM_COLUMNS; i++) {
-        currentRow[i] += lastRow[i];
+        currentRow.set(i, lastRow.get(i));
       }
     }
     numRows++;
   }
 
   // WARNING: not sure about the following port of the function
-  public double[] getRow(int i) {
-    return Arrays.copyOfRange(data, (i % MAX_ROWS) * NUM_COLUMNS, (i % MAX_ROWS + 1) * NUM_COLUMNS);
+  public RowView getRow(int i) {
+    int startIdx = (i % MAX_ROWS) * NUM_COLUMNS;
+    return new RowView(data, startIdx, NUM_COLUMNS);
   }
 
   // WARNING: not sure about the following port of the function
   public double[] getRowConst(int i) {
-    return getRow(i);
+    return Arrays.copyOfRange(data, (i % MAX_ROWS) * NUM_COLUMNS, (i % MAX_ROWS + 1) * NUM_COLUMNS);
   }
 
   public double area(int r1, int c1, int r2, int c2) {
