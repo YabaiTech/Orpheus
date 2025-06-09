@@ -1,9 +1,6 @@
 package org.orpheus;
 
-import java.lang.Math.*;
 import java.util.Arrays;
-
-import org.orpheus.Constants;
 
 public class Chroma {
   private final double[] coefficients = { 0.25, 0.75, 1.0, 0.75, 0.25 };

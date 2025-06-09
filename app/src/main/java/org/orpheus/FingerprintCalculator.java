@@ -1,7 +1,6 @@
 package org.orpheus;
 
 import java.util.ArrayList;
-import org.orpheus.Filter;
 
 public class FingerprintCalculator implements AutoCloseable {
   public RollingIntegralImage image;

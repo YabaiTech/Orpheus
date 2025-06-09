@@ -1,8 +1,5 @@
 package org.orpheus;
 
-import java.lang.Math.*;
-import org.orpheus.Constants;
-
 class Hamming {
   public double[] hamming = null;
 
