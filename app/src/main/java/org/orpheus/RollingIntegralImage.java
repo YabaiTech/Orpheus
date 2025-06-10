@@ -74,12 +74,20 @@ public class RollingIntegralImage {
       return 0;
     }
 
-    assert r2 > r1;
-    assert c2 > c1;
+    if (r2 <= r1) {
+      throw new IllegalArgumentException("[RollingIntegralImage] The passed argument r2 <= r1");
+    }
+    if (c2 <= c1) {
+      throw new IllegalArgumentException("[RollingIntegralImage] The passed argument c2 <= c1");
+    }
 
     if (r1 == 0) {
       double[] row = getRowConst(r2 - 1);
-      return (c1 == 0) ? row[c2 - 1] : row[c2 - 1] - row[c1 - 1];
+      if (c1 == 0) {
+        return row[c2 - 1];
+      } else {
+        return row[c2 - 1] - row[c1 - 1];
+      }
     } else {
       double[] row1 = getRowConst(r1 - 1);
       double[] row2 = getRowConst(r2 - 1);
@@ -111,7 +119,7 @@ public class RollingIntegralImage {
       case 5:
         return filter5(x, filter.y, filter.width, filter.height);
       default:
-        throw new IllegalArgumentException("Unknown filter type");
+        throw new IllegalArgumentException("[RollingIntegralImage] Unknown filter type");
     }
   }
 
@@ -160,6 +168,9 @@ public class RollingIntegralImage {
   private double subtractLog(double a, double b) {
     double r = (double) Math.log((1.0 + a) / (1.0 + b));
     assert !Double.isNaN(r);
+    if (Double.isNaN(r)) {
+      throw new ArithmeticException("[RollingIntegralImage] Computed r is NaN");
+    }
     return r;
   }
 }
