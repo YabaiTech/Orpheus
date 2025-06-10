@@ -37,13 +37,11 @@ public class RollingIntegralImage {
     numRows++;
   }
 
-  // WARNING: not sure about the following port of the function
   public RowView getRow(int i) {
     int startIdx = (i % MAX_ROWS) * NUM_COLUMNS;
     return new RowView(data, startIdx, NUM_COLUMNS);
   }
 
-  // WARNING: not sure about the following port of the function
   public double[] getRowConst(int i) {
     return Arrays.copyOfRange(data, (i % MAX_ROWS) * NUM_COLUMNS, (i % MAX_ROWS + 1) * NUM_COLUMNS);
   }
