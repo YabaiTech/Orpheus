@@ -31,7 +31,7 @@ public class RollingIntegralImage {
     if (numRows > 0) {
       RowView lastRow = getRow(numRows - 1);
       for (int i = 0; i < NUM_COLUMNS; i++) {
-        currentRow.set(i, lastRow.get(i));
+        currentRow.set(i, currentRow.get(i) + lastRow.get(i));
       }
     }
     numRows++;
