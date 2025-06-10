@@ -119,7 +119,7 @@ public class RollingIntegralImage {
       case 5:
         return filter5(x, filter.y, filter.width, filter.height);
       default:
-        throw new IllegalArgumentException("Unknown filter type");
+        throw new IllegalArgumentException("[RollingIntegralImage] Unknown filter type");
     }
   }
 
