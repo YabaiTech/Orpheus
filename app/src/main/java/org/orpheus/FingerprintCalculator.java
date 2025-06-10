@@ -7,24 +7,6 @@ public class FingerprintCalculator implements AutoCloseable {
   public ArrayList<Integer> fingerprint;
   // we don't need an allocator since Java provides us with one automatically
 
-  public int maxFilterWidth;
-
-  FingerprintCalculator() {
-    this.image = new RollingIntegralImage();
-    this.fingerprint = new ArrayList<Integer>();
-
-    // this was done it comp-time in Zig
-    calculateMaxFilterWidth();
-  }
-
-  // we use the free the resources explicitly (more of a symbolic thing as the GC
-  // would have free'd it anyway)
-  @Override
-  public void close() {
-    this.image = null;
-    this.fingerprint = null;
-  }
-
   // filters
   Filter f1 = new Filter(0, 4, 3, 15);
   Filter f2 = new Filter(4, 4, 6, 15);
@@ -74,6 +56,24 @@ public class FingerprintCalculator implements AutoCloseable {
       new Classifier(f10, q10), new Classifier(f11, q11), new Classifier(f12, q12),
       new Classifier(f13, q13), new Classifier(f14, q14), new Classifier(f15, q15),
       new Classifier(f16, q16) };
+
+  public int maxFilterWidth;
+
+  FingerprintCalculator() {
+    this.image = new RollingIntegralImage();
+    this.fingerprint = new ArrayList<Integer>();
+
+    // this was done it comp-time in Zig
+    calculateMaxFilterWidth();
+  }
+
+  // we use the free the resources explicitly (more of a symbolic thing as the GC
+  // would have free'd it anyway)
+  @Override
+  public void close() {
+    this.image = null;
+    this.fingerprint = null;
+  }
 
   // this was done it comp-time in Zig
   void calculateMaxFilterWidth() {
