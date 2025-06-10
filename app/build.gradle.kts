@@ -19,6 +19,7 @@ repositories {
 dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("com.github.wendykierp:JTransforms:3.1");
 }
 
 testing {
@@ -29,6 +30,10 @@ testing {
             useJUnitJupiter("5.12.1")
         }
     }
+}
+
+tasks.test {
+  testLogging.showStandardStreams = true
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
