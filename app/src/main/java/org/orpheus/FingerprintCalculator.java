@@ -94,7 +94,7 @@ public class FingerprintCalculator implements AutoCloseable {
   public void addFeatures(double[] features) {
     image.addRow(features);
     if (image.numRows >= maxFilterWidth) {
-      final int subFingerprint = calculateSubFingerprint(image.numRows - maxFilterWidth);
+      int subFingerprint = calculateSubFingerprint(image.numRows - maxFilterWidth);
 
       // If the audio is long enough, the following line could throw due to lack of
       // memory
@@ -103,7 +103,7 @@ public class FingerprintCalculator implements AutoCloseable {
   }
 
   public int calculateSubFingerprint(int offset) {
-    final int[] grayCodes = new int[] { 0, 1, 3, 2 };
+    final byte[] grayCodes = new byte[] { 0, 1, 3, 2 };
     int bits = 0;
 
     for (Classifier c : classifiers) {
