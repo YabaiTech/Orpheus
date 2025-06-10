@@ -33,6 +33,9 @@ public class FingerprintPipeline {
 
       // step 3: precompute Hamming(4096)
       double[] hamming = new Hamming().hamming;
+      if (hamming == null) {
+        throw new IllegalStateException("Hamming window not initialized.");
+      }
       Chroma chroma = new Chroma();
       FingerprintCalculator fingerprintCalculator = new FingerprintCalculator();
 

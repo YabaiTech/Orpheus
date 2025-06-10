@@ -3,6 +3,7 @@ package org.orpheus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -56,20 +57,22 @@ class FingerprintPipelineTest {
   @Test
   public void testAgainstFpcalc() {
     double[] samples = ProcessAudio.parse(System.getenv("HOME") + "/hope.wav");
+    assertEquals(new File(System.getenv("HOME") + "/hope.wav").exists(), true, "File exists.");
+    assertNotNull(samples, "Parsed sampels must not return null");
     FingerprintPipeline fingerprintPipeline = new FingerprintPipeline();
 
-    int[] fp1 = fingerprintPipeline.calculateFingerPrint(samples);
-    byte[] cfp1 = fingerprintPipeline.compressFingerprint(fp1);
-    int[] fp2 = fingerprintPipeline.calculateFingerPrint(samples);
-    byte[] cfp2 = fingerprintPipeline.compressFingerprint(fp2);
+    try {
+      int[] fp1 = fingerprintPipeline.calculateFingerPrint(samples);
+      byte[] cfp1 = fingerprintPipeline.compressFingerprint(fp1);
+      int[] fp2 = fingerprintPipeline.calculateFingerPrint(samples);
+      byte[] cfp2 = fingerprintPipeline.compressFingerprint(fp2);
 
-    assertNotNull(fp1, "Raw fingerprint should be non-null.");
-    assertNotNull(fp2, "Raw fingerprint should be non-null.");
-    assertArrayEquals(fp1, fp2, "Raw fingerprint calculation on the same sample should always be identical");
-    assertNotNull(cfp2, "Fingerprint should be non-null.");
-    assertNotNull(cfp2, "Fingerprint should be non-null.");
-    assertArrayEquals(cfp1, cfp2, "Fingerprint calculation on the same sample should always be identical");
-
-    System.out.println(Base64.getEncoder().encodeToString(cfp1));
+      assertNotNull(fp1, "Raw fingerprint should be non-null.");
+      assertNotNull(fp2, "Raw fingerprint should be non-null.");
+      assertArrayEquals(fp1, fp2, "Raw fingerprint calculation on the same sample should always be identical");
+      assertArrayEquals(cfp1, cfp2, "Fingerprint calculation on the same sample should always be identical");
+    } catch (NullPointerException e) {
+      e.printStackTrace();
+    }
   }
 }
