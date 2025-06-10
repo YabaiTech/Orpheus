@@ -47,16 +47,28 @@ public class RollingIntegralImage {
   }
 
   public double area(int r1, int c1, int r2, int c2) {
-    assert r1 <= numRows;
-    assert r2 <= numRows;
-
-    if (numRows > MAX_ROWS) {
-      assert r1 > numRows - MAX_ROWS;
-      assert r2 > numRows - MAX_ROWS;
+    if (r1 > numRows) {
+      throw new IllegalArgumentException("[RollingIntegralImage] Passed argument r1 > numRows");
+    }
+    if (r2 > numRows) {
+      throw new IllegalArgumentException("[RollingIntegralImage] Passed argument r2 > numRows");
     }
 
-    assert c1 <= NUM_COLUMNS;
-    assert c2 <= NUM_COLUMNS;
+    if (numRows > MAX_ROWS) {
+      if (r1 <= numRows - MAX_ROWS) {
+        throw new IllegalArgumentException("[RollingIntegralImage] Passed argument r1 >= (numRows - MAX_ROWS)");
+      }
+      if (r2 <= numRows - MAX_ROWS) {
+        throw new IllegalArgumentException("[RollingIntegralImage] Passed argument r2 >= (numRows - MAX_ROWS)");
+      }
+    }
+
+    if (c1 > NUM_COLUMNS) {
+      throw new IllegalArgumentException("[RollingIntegralImage] Passed argument c1 > NUM_COLUMNS");
+    }
+    if (c2 > NUM_COLUMNS) {
+      throw new IllegalArgumentException("[RollingIntegralImage] Passed argument c2 > NUM_COLUMNS");
+    }
 
     if (r1 == r2 || c1 == c2) {
       return 0;
