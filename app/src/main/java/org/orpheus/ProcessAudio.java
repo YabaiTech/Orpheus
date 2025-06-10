@@ -13,10 +13,10 @@ public class ProcessAudio {
       AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(file));
 
       AudioInputStream pcmStream = AudioSystem.getAudioInputStream(TARGET_FORMAT, inputStream);
-      inputStream.close();
 
       byte[] streamBytes = pcmStream.readAllBytes();
       pcmStream.close();
+      inputStream.close();
 
       int sampleSize = TARGET_FORMAT.getSampleSizeInBits() / 8;
       int channelCount = TARGET_FORMAT.getChannels();
@@ -25,7 +25,7 @@ public class ProcessAudio {
       double[] samples = new double[totalFrames];
       for (int frame = 0, sampleIdx = 0; frame < totalFrames; ++frame) {
         int low = streamBytes[sampleIdx] & 0xFF;
-        int high = streamBytes[sampleIdx + 1] << 8;
+        int high = (streamBytes[sampleIdx + 1] & 0xFF) << 8;
         int signed16 = high | low;
 
         samples[frame] = signed16 / 32768.0;

@@ -24,7 +24,7 @@ public class FingerprintPipeline {
       int leftover = samples.length % this.HOP_SIZE;
       if (leftover != 0 && samples.length > frames.size() * HOP_SIZE) {
         double[] leftoverFrame = new double[this.WINDOW_SIZE];
-        int start = frames.size() * HOP_SIZE;
+        int start = (frames.size() - 1) * HOP_SIZE + HOP_SIZE;
         int leftoverLength = samples.length - start;
 
         System.arraycopy(samples, start, leftoverFrame, 0, leftoverLength);
@@ -88,7 +88,8 @@ public class FingerprintPipeline {
     }
 
     // step 10: compress into byte[]
-    Compress compressor = new Compress(fingerprint.length, fingerprint.length / 10);
+    int buckets = Math.max(1, fingerprint.length / 10);
+    Compress compressor = new Compress(fingerprint.length, buckets);
 
     return compressor.compress(fingerprint);
   }
