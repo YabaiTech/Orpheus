@@ -83,7 +83,11 @@ public class RollingIntegralImage {
 
     if (r1 == 0) {
       double[] row = getRowConst(r2 - 1);
-      return (c1 == 0) ? row[c2 - 1] : row[c2 - 1] - row[c1 - 1];
+      if (c1 == 0) {
+        return row[c2 - 1];
+      } else {
+        return row[c2 - 1] - row[c1 - 1];
+      }
     } else {
       double[] row1 = getRowConst(r1 - 1);
       double[] row2 = getRowConst(r2 - 1);
