@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Compress {
-  private ArrayList<Integer> normalBits;
-  private ArrayList<Integer> exceptionalBits;
+  private ArrayList<Byte> normalBits;
+  private ArrayList<Byte> exceptionalBits;
 
   // this is basically a placeholder. We initialize the whole thing through the
   // `compress()` method call
@@ -20,8 +20,8 @@ class Compress {
     //
     // However, this is quite confusing. That's why we might want to change it later
     // on during the refactoring phase.
-    final int normalBits = 3;
-    final int maxNormalValue = (1 << normalBits) - 1;
+    final byte normalBits = 3;
+    final byte maxNormalValue = (1 << normalBits) - 1;
 
     int bit = 1;
     int lastBit = 0;
@@ -32,11 +32,11 @@ class Compress {
     // user-friendly manner (through the UI)
     while (x != 0) {
       if ((x & 1) != 0) {
-        final int value = bit - lastBit;
+        final byte value = (byte) (bit - lastBit);
 
         if (value >= maxNormalValue) {
           this.normalBits.add(maxNormalValue);
-          this.exceptionalBits.add(value - maxNormalValue);
+          this.exceptionalBits.add((byte) (value - maxNormalValue));
         } else {
           this.normalBits.add(value);
         }
@@ -45,7 +45,7 @@ class Compress {
       x >>= 1;
       bit += 1;
     }
-    this.normalBits.add(0);
+    this.normalBits.add((byte) 0);
   }
 
   public byte[] compress(int[] fingerprint) {
@@ -84,7 +84,7 @@ class Compress {
   }
 
   // Not sure about the following Java port
-  private int packInt3Array(byte[] dest, int offset, List<Integer> src) {
+  private int packInt3Array(byte[] dest, int offset, List<Byte> src) {
     int srcIndex = 0;
     int destIndex = offset;
 
@@ -158,7 +158,7 @@ class Compress {
   }
 
   // Not sure about the following Java port
-  private int packInt5Array(byte[] dest, int offset, List<Integer> src) {
+  private int packInt5Array(byte[] dest, int offset, List<Byte> src) {
     int srcIndex = 0;
     int destIndex = offset;
 
