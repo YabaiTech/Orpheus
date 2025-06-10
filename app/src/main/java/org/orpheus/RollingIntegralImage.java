@@ -124,12 +124,22 @@ public class RollingIntegralImage {
   }
 
   private double filter0(int x, int y, int w, int h) {
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter0: Either w < 1 or h < 1, which are invalid values");
+    }
+
     double a = area(x, y, x + w, y + h);
     double b = 0;
     return subtractLog(a, b);
   }
 
   private double filter1(int x, int y, int w, int h) {
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter1: Either w < 1 or h < 1, which are invalid values");
+    }
+
     int h2 = h / 2;
     double a = area(x, y + h2, x + w, y + h);
     double b = area(x, y, x + w, y + h2);
@@ -137,6 +147,11 @@ public class RollingIntegralImage {
   }
 
   private double filter2(int x, int y, int w, int h) {
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter2: Either w < 1 or h < 1, which are invalid values");
+    }
+
     int w2 = w / 2;
     double a = area(x + w2, y, x + w, y + h);
     double b = area(x, y, x + w2, y + h);
@@ -144,6 +159,15 @@ public class RollingIntegralImage {
   }
 
   private double filter3(int x, int y, int w, int h) {
+    if (x < 0 | y < 0) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter3: Either x < 0 or y < 0, which are invalid values");
+    }
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter3: Either w < 1 or h < 1, which are invalid values");
+    }
+
     int w2 = w / 2;
     int h2 = h / 2;
     double a = area(x, y + h2, x + w2, y + h) + area(x + w2, y, x + w, y + h2);
@@ -152,6 +176,11 @@ public class RollingIntegralImage {
   }
 
   private double filter4(int x, int y, int w, int h) {
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter4: Either w < 1 or h < 1, which are invalid values");
+    }
+
     int h3 = h / 3;
     double a = area(x, y + h3, x + w, y + 2 * h3);
     double b = area(x, y, x + w, y + h3) + area(x, y + 2 * h3, x + w, y + h);
@@ -159,6 +188,11 @@ public class RollingIntegralImage {
   }
 
   private double filter5(int x, int y, int w, int h) {
+    if (w < 1 | h < 1) {
+      throw new IllegalArgumentException(
+          "[RollingIntegralImage] Filter5: Either w < 1 or h < 1, which are invalid values");
+    }
+
     int w3 = w / 3;
     double a = area(x + w3, y, x + 2 * w3, y + h);
     double b = area(x, y, x + w3, y + h) + area(x + 2 * w3, y, x + w, y + h);

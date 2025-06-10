@@ -7,24 +7,6 @@ public class FingerprintCalculator implements AutoCloseable {
   public ArrayList<Integer> fingerprint;
   // we don't need an allocator since Java provides us with one automatically
 
-  public int maxFilterWidth;
-
-  FingerprintCalculator() {
-    this.image = new RollingIntegralImage();
-    this.fingerprint = new ArrayList<Integer>();
-
-    // this was done it comp-time in Zig
-    calculateMaxFilterWidth();
-  }
-
-  // we use the free the resources explicitly (more of a symbolic thing as the GC
-  // would have free'd it anyway)
-  @Override
-  public void close() {
-    this.image = null;
-    this.fingerprint = null;
-  }
-
   // filters
   Filter f1 = new Filter(0, 4, 3, 15);
   Filter f2 = new Filter(4, 4, 6, 15);
@@ -75,6 +57,24 @@ public class FingerprintCalculator implements AutoCloseable {
       new Classifier(f13, q13), new Classifier(f14, q14), new Classifier(f15, q15),
       new Classifier(f16, q16) };
 
+  public int maxFilterWidth;
+
+  FingerprintCalculator() {
+    this.image = new RollingIntegralImage();
+    this.fingerprint = new ArrayList<Integer>();
+
+    // this was done it comp-time in Zig
+    calculateMaxFilterWidth();
+  }
+
+  // we use the free the resources explicitly (more of a symbolic thing as the GC
+  // would have free'd it anyway)
+  @Override
+  public void close() {
+    this.image = null;
+    this.fingerprint = null;
+  }
+
   // this was done it comp-time in Zig
   void calculateMaxFilterWidth() {
     int result = 0;
@@ -84,7 +84,8 @@ public class FingerprintCalculator implements AutoCloseable {
     }
 
     if (result <= 0 || result >= 256) {
-      throw new IllegalArgumentException("[FingerprintCalculator] Calculated MaxFilterWidth is invalid!");
+      throw new IllegalArgumentException(
+          "[FingerprintCalculator] Calculated MaxFilterWidth is out of bounds. It's either");
     }
 
     maxFilterWidth = result;
@@ -93,7 +94,7 @@ public class FingerprintCalculator implements AutoCloseable {
   public void addFeatures(double[] features) {
     image.addRow(features);
     if (image.numRows >= maxFilterWidth) {
-      final int subFingerprint = calculateSubFingerprint(image.numRows - maxFilterWidth);
+      int subFingerprint = calculateSubFingerprint(image.numRows - maxFilterWidth);
 
       // If the audio is long enough, the following line could throw due to lack of
       // memory
@@ -102,7 +103,7 @@ public class FingerprintCalculator implements AutoCloseable {
   }
 
   public int calculateSubFingerprint(int offset) {
-    final int[] grayCodes = new int[] { 0, 1, 3, 2 };
+    final byte[] grayCodes = new byte[] { 0, 1, 3, 2 };
     int bits = 0;
 
     for (Classifier c : classifiers) {
