@@ -168,6 +168,9 @@ public class RollingIntegralImage {
   private double subtractLog(double a, double b) {
     double r = (double) Math.log((1.0 + a) / (1.0 + b));
     assert !Double.isNaN(r);
+    if (Double.isNaN(r)) {
+      throw new ArithmeticException("[RollingIntegralImage] Computed r is NaN");
+    }
     return r;
   }
 }
