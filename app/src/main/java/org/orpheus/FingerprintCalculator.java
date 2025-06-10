@@ -84,7 +84,8 @@ public class FingerprintCalculator implements AutoCloseable {
     }
 
     if (result <= 0 || result >= 256) {
-      throw new IllegalArgumentException("[FingerprintCalculator] Calculated MaxFilterWidth is invalid!");
+      throw new IllegalArgumentException(
+          "[FingerprintCalculator] Calculated MaxFilterWidth is out of bounds. It's either");
     }
 
     maxFilterWidth = result;
