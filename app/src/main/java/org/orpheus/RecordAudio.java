@@ -24,11 +24,11 @@ public class RecordAudio {
   }
 
   private AudioFormat getAudioFormat() {
-    float rate = 16000.0F;
-    int sizeInBits = 8;
-    int channels = 2;
+    float rate = Constants.sampleRate;
+    int sizeInBits = Constants.bitsPerSample;
+    int channels = Constants.channelCount;
     boolean signed = true;
-    boolean bigEndian = true;
+    boolean bigEndian = false;
 
     return new AudioFormat(rate, sizeInBits, channels, signed, bigEndian);
   }
