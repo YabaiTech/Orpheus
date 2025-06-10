@@ -74,8 +74,12 @@ public class RollingIntegralImage {
       return 0;
     }
 
-    assert r2 > r1;
-    assert c2 > c1;
+    if (r2 <= r1) {
+      throw new IllegalArgumentException("[RollingIntegralImage] The passed argument r2 <= r1");
+    }
+    if (c2 <= c1) {
+      throw new IllegalArgumentException("[RollingIntegralImage] The passed argument c2 <= c1");
+    }
 
     if (r1 == 0) {
       double[] row = getRowConst(r2 - 1);
