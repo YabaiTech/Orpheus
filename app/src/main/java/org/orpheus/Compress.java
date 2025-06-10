@@ -42,7 +42,7 @@ class Compress {
         }
         lastBit = bit;
       }
-      x >>= 1;
+      x >>>= 1;
       bit += 1;
     }
     this.normalBits.add((byte) 0);
